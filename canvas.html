@@ -2,16 +2,16 @@
 
 <p id="demo"></p>
 
+<form id = "params">
+Amplitude: <input type="number" name="amp" min="50" max="150"><t>
+Frequency: <input type="number" name="freq" min="1" max="1000"><br>
+Envelope Freq: <input type="number" name="envfreq" min="1" max="40"><t>
+Show Waveform: <input type="checkbox" name="animate" value="myvalue"><br>
+</form>
+
 <canvas id = "myCanvas" width = "800" height = "300"
 style = "border:10px solid #0000FF;" > Your browser does not support the HTML5 canvas tag.
 </canvas>
-
-<form id = "params">
-Amplitude: <input type="number" name="amp" min="50" max="150"><br>
-Frequency: <input type="number" name="freq" min="1" max="1000"><br>
-Envelope Freq: <input type="number" name="envfreq" min="1" max="40"><br>
-Show Waveform: <input type="checkbox" name="animate" value="myvalue">
-</form>
 
 <form>
 </form>
@@ -32,7 +32,9 @@ var envfreq = document.getElementById("params").envfreq;
 var animate = document.getElementById("params").animate;
 
 var beta = 0;
-var freqAdjuster = adjustFreqDec;
+var ff = 0;
+var AdjustFreq = AdjustFreqDec;
+var envelope =1 ;
 
 amp.value = 100;
 freq.value = 12;
@@ -41,7 +43,7 @@ animate.checked = true;
 
 function moveWave()
 {
-	var A, f, f_env, envelope, twopi = 2*Math.PI;
+	var A, f, f_env, twopi = 2*Math.PI;
 	
 	A = parseInt(amp.value);
 	f = parseInt(freq.value);
@@ -51,35 +53,27 @@ function moveWave()
 	if (animate.checked)
 	{
 		ctx.clearRect(0,0,800,300);
+		
 		for (t = 0; t < 800*resolution; t++)
 		{
-			envelope = Math.sin(twopi*f_env*(t+100)/800);		
+			envelope = Math.sin(twopi*f_env*(1+ff)*(t+400)/800);	
 			ctx.fillRect(t, A*envelope*Math.sin(twopi*f*(t-beta)/800) + 150, 2, 2);
 		}
-		// freqAdjuster();
+		
+		// AdjustFreq();		
 		ctx.stroke();
 	}
 }
 
-function adjustFreqInc()
+function AdjustFreqInc()
 {
-	var ff = parseFloat(freq.value);
-	ff += 1;
-	if (ff > 17)
-		freqAdjuster = adjustFreqDec;
-	
-	freq.value = ff;	
+	if ((ff+=0.05) > 1.25) AdjustFreq = AdjustFreqDec;
 }
 
-function adjustFreqDec()
+function AdjustFreqDec()
 {
-	var ff = parseFloat(freq.value);
-	ff -= 1;
-	if (ff < 7)
-		freqAdjuster = adjustFreqInc;
-
-	freq.value = ff;
-}
+	if ((ff-=0.05) < -.25) AdjustFreq = AdjustFreqInc;
+}		
 
 </script>
 
