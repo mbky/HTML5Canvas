@@ -9,58 +9,54 @@ style = "border:10px solid #0000FF;" > Your browser does not support the HTML5 c
 <form id = "params">
 Amplitude: <input type="number" name="amp" min="50" max="150"><br>
 Frequency: <input type="number" name="freq" min="1" max="1000"><br>
-Envelope Amp: <input type="number" name="envamp" min="1" max="40"><br>
+Envelope Freq: <input type="number" name="envfreq" min="1" max="40"><br>
+Show Waveform: <input type="checkbox" name="animate" value="myvalue">
 </form>
 
 <form>
-Checkbox: <input type="checkbox" id="myCheck" value="myvalue">
 </form>
 
 <script>
 
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
-var beta = 0;
-var f = 20;
-var updatePeriod = 100;
-var myVar=setInterval(function(){moveWave()},updatePeriod);
-var freqAdjuster = adjustFreqDec;
-var resolution = 100;
+ctx.fillStyle='rgb(0,0,255)';
 
+var resolution = 100;
+var myVar=setInterval(function(){moveWave()},resolution);
+
+var debug = document.getElementById("demo");
 var amp = document.getElementById("params").amp;
 var freq = document.getElementById("params").freq;
-var envamp = document.getElementById("params").envamp;
-var moveTheWave = document.getElementById("myCheck");
-var debug = document.getElementById("demo");
-var z = 0;
-amp.value = 125;
-freq.value = 5;
-envamp.value = 1;
+var envfreq = document.getElementById("params").envfreq;
+var animate = document.getElementById("params").animate;
+
+var beta = 0;
+var freqAdjuster = adjustFreqDec;
+
+amp.value = 100;
+freq.value = 12;
+envfreq.value = 1.0;
+animate.checked = true;
 
 function moveWave()
 {
-	var A, envelope, angle, pi = Math.PI;
+	var A, f, f_env, envelope, twopi = 2*Math.PI;
 	
 	A = parseInt(amp.value);
 	f = parseInt(freq.value);
-	beta+=12;
+	f_env = parseFloat(envfreq.value);
+	beta = ((beta+12)%800);
 	
-	z++;
-	
-	//debug.innerHTML = moveTheWave.checked.toString() +z.toString();
-	if (moveTheWave.checked == true)
+	if (animate.checked)
 	{
 		ctx.clearRect(0,0,800,300);
 		for (t = 0; t < 800*resolution; t++)
 		{
-			//envelope = Math.sin((1*resolution)*(t+200-beta/2)*2*pi/(800*resolution));		
-			//envelope /= parseFloat(envamp.value);		
-			envelope = 1;
-			angle = t - beta;
-			ctx.fillStyle='rgb(0,0,255)'; 
-			ctx.fillRect(t, A*envelope*Math.sin((f*resolution)*angle*2*pi/(800*resolution)) + 150, 2, 2);
+			envelope = Math.sin(twopi*f_env*(t+100)/800);		
+			ctx.fillRect(t, A*envelope*Math.sin(twopi*f*(t-beta)/800) + 150, 2, 2);
 		}
-		//freqAdjuster();
+		// freqAdjuster();
 		ctx.stroke();
 	}
 }
@@ -68,8 +64,8 @@ function moveWave()
 function adjustFreqInc()
 {
 	var ff = parseFloat(freq.value);
-	ff += 0.1;
-	if (ff > 22)
+	ff += 1;
+	if (ff > 17)
 		freqAdjuster = adjustFreqDec;
 	
 	freq.value = ff;	
@@ -78,8 +74,8 @@ function adjustFreqInc()
 function adjustFreqDec()
 {
 	var ff = parseFloat(freq.value);
-	ff -= 0.1;
-	if (ff < 18)
+	ff -= 1;
+	if (ff < 7)
 		freqAdjuster = adjustFreqInc;
 
 	freq.value = ff;
