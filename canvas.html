@@ -54,7 +54,7 @@ function moveWave()
 	{
 		ctx.clearRect(0,0,800,300);
 		
-		for (t = 0; t < 800*resolution; t++)
+		for (var t = 0; t < 800*resolution; t++)
 		{
 			envelope = Math.sin(twopi*f_env*(1+ff)*(t+400)/800);	
 			ctx.fillRect(t, A*envelope*Math.sin(twopi*f*(t-beta)/800) + 150, 2, 2);
@@ -72,7 +72,7 @@ function AdjustFreqInc()
 
 function AdjustFreqDec()
 {
-	if ((ff-=0.05) < -.25) AdjustFreq = AdjustFreqInc;
+	if ((ff-=0.05) < -0.25) AdjustFreq = AdjustFreqInc;
 }		
 
 </script>
