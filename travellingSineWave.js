@@ -25,7 +25,7 @@ function moveWave()
 		ctx.clearRect(0,0,800,300);
 		for (var t = 0; t < 800; t++)
 		{
-            var waveValue = Math.sin(twopi*f*(t-beta)/800);
+			var waveValue = Math.sin(twopi*f*(t-beta)/800);
 			ctx.fillRect(t, A*waveValue + 150, 2, 2);
 		}
 		ctx.stroke();
