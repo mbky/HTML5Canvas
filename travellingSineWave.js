@@ -5,9 +5,9 @@ var freq = document.getElementById("params").freq;
 var animate = document.getElementById("animate").animate;
 var beta = 0;
 
-ctx.fillStyle = 'rgb(00,00,128)';
+ctx.fillStyle = 'rgb(0,0,255)';
 
-setInterval(moveWave(), 100);
+setInterval(moveWave, 100);
 
 function moveWave() {
 	var A, w;
