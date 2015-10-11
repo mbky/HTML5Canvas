@@ -28,7 +28,6 @@ function moveWave() {
   xpos = vxi*t+ax*t*t;
   ypos = vyi*t+ay*t*t;  
   
-	ctx.fillRect(300+50*xpos, 600-50*ypos, 2, 2);
-	
+  ctx.fillRect(300+50*xpos, 600-50*ypos, 2, 2);
 	ctx.stroke();
 }
